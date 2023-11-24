@@ -48,8 +48,10 @@ console.log('Бот запущено...');
 schedule.scheduleJob('*/1 * * * *', () => {
   const currentTime = new Date().getTime();
   const filteredPhotos = scheduledPhotos.filter((photo) => photo.sendTime <= currentTime);
+  console.log(111, filteredPhotos)
 
   for (const photo of filteredPhotos) {
+    console.log(222, photo)
     sendScheduledPhoto(photo.chatId, photo.file_id);
     scheduledPhotos = scheduledPhotos.filter((p) => p !== photo);
   }

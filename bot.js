@@ -10,11 +10,13 @@ let scheduledPhotos = [];
 bot.start((ctx) => {
   const chatId = ctx.message.chat.id;
   ctx.reply('Бот запущено. Виберіть канал за допомогою /setchannel');
+  console.log(`start`);
 });
 
 bot.command('setchannel', (ctx) => {
   selectedChannelId = ctx.message.forward_from_chat.id;
   ctx.reply(`Канал встановлено: ${selectedChannelId}`);
+  console.log(`setchannel`, selectedChannelId);
 });
 
 bot.on('text', (ctx) => {
@@ -30,6 +32,8 @@ bot.on('photo', (ctx) => {
   const chatId = ctx.message.chat.id;
   const photo = ctx.message.photo[ctx.message.photo.length - 1];
   const file_id = photo.file_id;
+
+  console.log(`photo`);
 
   // Розбиття картинок поштучно
   scheduledPhotos.push({ chatId, file_id });

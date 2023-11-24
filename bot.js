@@ -37,6 +37,9 @@ bot.on('photo', (ctx) => {
   ctx.reply('Фото додано до розкладу відправлення');
 });
 
+bot.launch();
+console.log('Бот запущено...');
+
 // Регулярний інтервал для перевірки та відправлення відкладених фотографій
 schedule.scheduleJob('*/1 * * * *', () => {
   const currentTime = new Date().getTime();
@@ -51,18 +54,22 @@ schedule.scheduleJob('*/1 * * * *', () => {
   console.log(`Кількість постів у відкладеному розкладі: ${scheduledPhotos.length}`);
 });
 
-bot.launch();
-console.log('Бот запущено...');
+function sendScheduledPhoto(chatId, file_id) {
+  // Запланований час відправлення
+  const sendTime = getNextSendTime();
+
+  // Виведення в консоль планування
+  console.log(`Заплановано відправлення фото на ${new Date(sendTime)} до ${chatId}`);
+
+  scheduledPhotos.push({ chatId, file_id, sendTime });
+}
 
 function getNextSendTime() {
   const currentTime = new Date();
   const startOfDay = new Date(currentTime);
   startOfDay.setHours(0, 0, 0, 0);
 
-  // Початковий інтервал відправлення
-  const initialInterval = 60 * 60 * 1000; // 1 година
-
-  // Кількість фото, які мають бути відправлені до обіду та після
+  // Визначення кількості фото, які мають бути відправлені до обіду та після
   const photosBeforeNoon = 12;
   const photosAfterNoon = 24;
 
@@ -78,20 +85,16 @@ function getNextSendTime() {
   // Визначення наступного інтервалу відправлення відповідно до графіка
   let nextInterval;
   if (sentBeforeNoon < photosBeforeNoon) {
-    nextInterval = initialInterval;
+    // Якщо ще не всі фото до обіду відправлені, використовуємо інтервал у 1 годину
+    nextInterval = 5 * 60 * 1000;
   } else if (sentAfterNoon < photosAfterNoon) {
-    nextInterval = initialInterval / 2;
+    // Якщо ще не всі фото після обіду відправлені, використовуємо інтервал у 30 хвилин
+    nextInterval = 15 * 60 * 1000
   } else {
     // Графік завершено, перейти до наступного дня
-    nextInterval = startOfDay + 24 * 60 * 60 * 1000 - currentTime + initialInterval;
+    nextInterval = startOfDay + 24 * 60 * 60 * 1000 - currentTime + 60 * 60 * 1000;
   }
 
+  // Повертаємо час в майбутньому для відправлення наступного фото
   return currentTime.getTime() + nextInterval;
-}
-
-function sendScheduledPhoto(chatId, file_id) {
-  const sendTime = getNextSendTime();
-  scheduledPhotos.push({ chatId, file_id, sendTime });
-
-  console.log(`Scheduled photo for ${new Date(sendTime)} successfully sent to ${chatId}`);
 }

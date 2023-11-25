@@ -1,7 +1,7 @@
 const { Telegraf } = require('telegraf');
 const moment = require('moment-timezone');
 
-const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
+const botToken = process.env.TOKEN;
 const bot = new Telegraf(botToken);
 
 let selectedChannelId = null;
@@ -47,7 +47,13 @@ bot.on('photo', (ctx) => {
   photoQueue.push({ chatId, file_id, sendTime });
 });
 
-bot.launch();
+bot.launch({
+  webhook: {
+    domain: 'https://telegram-app-2b8p.onrender.com',
+    port: process.env.PORT,
+  },
+});
+
 console.log('Бот запущено...');
 
 setInterval(() => {
@@ -83,7 +89,7 @@ function shouldSend(currentTime, isNightTime) {
   if (isNightTime) {
     return currentTime.minute() === 0;
   } else {
-    return currentTime.minute() % 30 === 0;
+    return currentTime.minute() % 3 === 0;
   }
 }
 

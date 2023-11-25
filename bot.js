@@ -1,7 +1,7 @@
 const { Telegraf } = require('telegraf');
 const moment = require('moment-timezone');
 
-const botToken = process.env.TOKEN;
+const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
 const bot = new Telegraf(botToken);
 
 let selectedChannelId = null;
@@ -47,12 +47,14 @@ bot.on('photo', (ctx) => {
   photoQueue.push({ chatId, file_id, sendTime });
 });
 
-bot.launch({
-  webhook: {
-    domain: 'https://telegram-app-2b8p.onrender.com',
-    port: process.env.PORT,
-  },
-});
+bot.launch()
+
+// bot.launch({
+//   webhook: {
+//     domain: 'https://ethereal-effort-406215.lm.r.appspot.com/',
+//     port: 443,
+//   },
+// });
 
 console.log('Бот запущено...');
 

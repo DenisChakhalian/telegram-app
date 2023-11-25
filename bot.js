@@ -89,7 +89,7 @@ function shouldSend(currentTime, isNightTime) {
   if (isNightTime) {
     return currentTime.minute() === 0;
   } else {
-    return currentTime.minute() % 3 === 0;
+    return currentTime.minute() % 30 === 0;
   }
 }
 

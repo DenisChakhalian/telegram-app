@@ -76,7 +76,7 @@ setInterval(() => {
 }, 30000);
 
 function calculateSendTime(currentTime, lastPhotoSentTime) {
-  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 12;
+  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() <= 12;
 
   if (lastPhotoSentTime) {
     const nextSendTime = lastPhotoSentTime.clone().add(isNightTime ? 1 : 0.5, 'hours');

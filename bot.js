@@ -8,6 +8,22 @@ let selectedChannelId = null;
 let lastPhotoSentTime = null;
 let photoQueue = [];
 
+async function startBot() {
+  try {
+    await bot.telegram.deleteWebhook();
+    await bot.launch({
+      webhook: {
+        domain: 'https://telegram-app-2b8p.onrender.com',
+        port: 443,
+      },
+    });
+  } catch (error) {
+    console.error('Error starting bot:', error.message);
+  }
+}
+
+
+
 bot.start((ctx) => {
   const chatId = ctx.message.chat.id;
   ctx.reply('Бот запущено. Виберіть канал за допомогою /setchannel');
@@ -47,14 +63,11 @@ bot.on('photo', (ctx) => {
   photoQueue.push({ chatId, file_id, sendTime });
 });
 
-bot.launch()
+// bot.launch()
 
-// bot.launch({
-//   webhook: {
-//     domain: 'https://ethereal-effort-406215.lm.r.appspot.com/',
-//     port: 443,
-//   },
-// });
+startBot(); // Запуск бота
+
+
 
 console.log('Бот запущено...');
 

@@ -1,5 +1,6 @@
 const { Telegraf } = require('telegraf');
 const moment = require('moment-timezone');
+const express = require('express');
 
 const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
 const bot = new Telegraf(botToken);
@@ -14,7 +15,7 @@ async function startBot() {
     await bot.launch({
       webhook: {
         domain: 'https://telegram-app-2b8p.onrender.com',
-        port: 443,
+        // port: 443,
       },
     });
   } catch (error) {
@@ -22,6 +23,29 @@ async function startBot() {
   }
 }
 
+const app = express();
+
+// Додайте middleware для обробки JSON-даних
+app.use(express.json());
+
+// Запустіть веб-сервер
+const port = 443;
+
+app.listen(port, () => {
+  console.log(`Express server listening on port ${port}`);
+});
+
+bot.start((ctx) => {
+  const chatId = ctx.message.chat.id;
+  ctx.reply('Бот запущено. Виберіть канал за допомогою /setchannel');
+});
+
+// Додайте маршрут для обробки /trigger
+app.post('/trigger', (req, res) => {
+  console.log('Received trigger request!');
+  // Ваша логіка для обробки /trigger
+  res.send('Trigger handled!');
+});
 
 
 bot.start((ctx) => {
@@ -42,11 +66,6 @@ bot.on('text', (ctx) => {
   if (ctx.message.forward_from) {
     ctx.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
   }
-});
-
-bot.command('triggerBot', (ctx) => {
-  console.log('reacted!')
-  ctx.reply('Бот відреагував на команду "triggerBot"!');
 });
 
 bot.on('photo', (ctx) => {
@@ -79,10 +98,6 @@ console.log('Бот запущено...');
 setInterval(() => {
   sendScheduledPhotos();
 }, 20000);
-
-setInterval(() => {
-  bot.telegram.sendMessage('6784050286', '/triggerBot');
-}, 600000); 
 
 function calculateSendTime(currentTime, lastPhotoSentTime) {
   const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 12;

@@ -44,6 +44,11 @@ bot.on('text', (ctx) => {
   }
 });
 
+bot.command('triggerBot', (ctx) => {
+  console.log('reacted!')
+  ctx.reply('Бот відреагував на команду "triggerBot"!');
+});
+
 bot.on('photo', (ctx) => {
   const chatId = ctx.message.chat.id;
   const photo = ctx.message.photo[ctx.message.photo.length - 1];
@@ -73,10 +78,14 @@ console.log('Бот запущено...');
 
 setInterval(() => {
   sendScheduledPhotos();
-}, 30000);
+}, 20000);
+
+setInterval(() => {
+  bot.telegram.sendMessage('6784050286', '/triggerBot');
+}, 600000); 
 
 function calculateSendTime(currentTime, lastPhotoSentTime) {
-  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() <= 12;
+  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 12;
 
   if (lastPhotoSentTime) {
     const nextSendTime = lastPhotoSentTime.clone().add(isNightTime ? 1 : 0.5, 'hours');

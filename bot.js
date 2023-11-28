@@ -12,41 +12,18 @@ let photoQueue = [];
 async function startBot() {
   try {
     await bot.telegram.deleteWebhook();
-    await bot.launch({
+    await bot.launch(
+      {
       webhook: {
         domain: 'https://telegram-app-2b8p.onrender.com',
-        port: 8443,
+        port: 443,
       },
-    });
+    }
+    );
   } catch (error) {
     console.error('Error starting bot:', error.message);
   }
 }
-
-const app = express();
-
-// Додайте middleware для обробки JSON-даних
-app.use(express.json());
-
-// Запустіть веб-сервер
-const port = 443;
-
-app.listen(port, () => {
-  console.log(`Express server listening on port ${port}`);
-});
-
-bot.start((ctx) => {
-  const chatId = ctx.message.chat.id;
-  ctx.reply('Бот запущено. Виберіть канал за допомогою /setchannel');
-});
-
-// Додайте маршрут для обробки /trigger
-app.post('/trigger', (req, res) => {
-  console.log('Received trigger request!');
-  // Ваша логіка для обробки /trigger
-  res.send('Trigger handled!');
-});
-
 
 bot.start((ctx) => {
   const chatId = ctx.message.chat.id;
@@ -63,9 +40,7 @@ bot.command('lastphoto', (ctx) => {
 });
 
 bot.on('text', (ctx) => {
-  if (ctx.message.forward_from) {
-    ctx.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
-  }
+  console.log(ctx.message)
 });
 
 bot.on('photo', (ctx) => {

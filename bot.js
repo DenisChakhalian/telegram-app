@@ -15,7 +15,7 @@ async function startBot() {
     await bot.launch({
       webhook: {
         domain: 'https://telegram-app-2b8p.onrender.com',
-        port: 443,
+        port: 8443,
       },
     });
   } catch (error) {

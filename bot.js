@@ -3,7 +3,7 @@ const moment = require("moment-timezone");
 const express = require("express");
 
 // const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
-const botToken = "6896155029:AAGSop5FZYpGU5VNdu-7fPL0JhaUfYY_zDA";
+const botToken = process.env.TOKEN;
 const bot = new Telegraf(botToken);
 
 let selectedChannelId = null;
@@ -16,14 +16,14 @@ async function startBot() {
   try {
     await bot.telegram.deleteWebhook();
     await bot
-      .launch
-      //   {
-      //   webhook: {
-      //     domain: 'https://telegram-app-2b8p.onrender.com',
-      //     port: 443,
-      //   },
-      // }
-      ();
+      .launch(
+        {
+        webhook: {
+          domain: 'https://telegram-app-2b8p.onrender.com',
+          port: process.env.PORT,
+        },
+      })
+      // ();
   } catch (error) {
     console.error("Error starting bot:", error.message);
   }

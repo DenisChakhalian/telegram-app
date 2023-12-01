@@ -2,8 +2,8 @@ const { Telegraf, Markup } = require("telegraf");
 const moment = require("moment-timezone");
 const express = require("express");
 
-// const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
-const botToken = process.env.TOKEN;
+const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
+// const botToken = process.env.TOKEN;
 const bot = new Telegraf(botToken);
 
 let selectedChannelId = null;
@@ -16,14 +16,14 @@ async function startBot() {
   try {
     await bot.telegram.deleteWebhook();
     await bot
-      .launch(
-        {
-        webhook: {
-          domain: 'https://telegram-app-2b8p.onrender.com',
-          port: process.env.PORT,
-        },
-      })
-      // ();
+      // .launch(
+      //   {
+      //   webhook: {
+      //     domain: 'https://telegram-app-2b8p.onrender.com',
+      //     port: process.env.PORT,
+      //   },
+      // })
+      .launch();
   } catch (error) {
     console.error("Error starting bot:", error.message);
   }
@@ -220,6 +220,7 @@ function sendScheduledPhotos() {
     console.log(`Фото відправлено о ${currentTime.format("HH:mm")}`);
     lastPhotoSentTime = moment().tz("Europe/Kiev");
   }
+  console.log(photoQueue)
 
   console.log(`Кількість фото у черзі: ${photoQueue.length}`);
 }
@@ -235,7 +236,7 @@ function shouldSend(currentTime, isNightTime) {
 
 async function sendScheduledPhoto(photo) {
   try {
-    if (!photo.isGroup) {
+    if (!photo.isGroup || !photo.media_group_id) {
       photoQueue.shift();
       await bot.telegram.sendMediaGroup(selectedChannelId, [
         {

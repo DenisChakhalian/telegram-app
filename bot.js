@@ -62,8 +62,6 @@ bot.hears("Дата останнього посту", (ctx) => {
   let isGroupPhoto;
   let photoGroupId = null;
 
-  console.log(currentTime, "1");
-
   photoQueue.forEach((photo) => {
     if (!isGroupPhoto || photo.media_group_id !== photoGroupId) {
       isGroupPhoto = photo.isGroup;
@@ -76,10 +74,6 @@ bot.hears("Дата останнього посту", (ctx) => {
       } else {
         currentTime.add(30, "minutes");
       }
-
-      console.log(currentTime);
-      console.log(isGroupPhoto);
-      console.log(photoGroupId);
     }
   });
 
@@ -105,8 +99,6 @@ bot.hears("Дата останнього посту", (ctx) => {
 });
 
 bot.command("setSign", (ctx) => {
-  console.log(ctx.message.text);
-  console.log(ctx.message.entities);
   const text = ctx.message.text
     .split(" ")
     .slice(1)
@@ -151,8 +143,6 @@ bot.on("photo", (ctx) => {
   const file_id = photo.file_id;
   const file_unique_id = photo.file_unique_id;
   const media_group_id = ctx.message.media_group_id;
-
-  console.log(media_group_id);
 
   if (photoQueue.some((el) => el.file_unique_id === file_unique_id)) {
     photoQueue = photoQueue.filter(
@@ -220,7 +210,6 @@ function sendScheduledPhotos() {
     console.log(`Фото відправлено о ${currentTime.format("HH:mm")}`);
     lastPhotoSentTime = moment().tz("Europe/Kiev");
   }
-  console.log(photoQueue)
 
   console.log(`Кількість фото у черзі: ${photoQueue.length}`);
 }

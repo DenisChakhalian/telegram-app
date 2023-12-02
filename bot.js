@@ -2,7 +2,6 @@ const { Telegraf, Markup } = require("telegraf");
 const moment = require("moment-timezone");
 const express = require("express");
 
-// const botToken = '6784050286:AAERYE8oUO-E8IOQR6TnOdkbliPpPI_bqyg';
 const botToken = process.env.TOKEN;
 const bot = new Telegraf(botToken);
 
@@ -15,15 +14,13 @@ let photoQueue = [];
 async function startBot() {
   try {
     await bot.telegram.deleteWebhook();
-    await bot
-      .launch(
-        {
-        webhook: {
-          domain: 'https://telegram-app-2b8p.onrender.com',
-          port: process.env.PORT,
-        },
-      })
-      // .launch();
+    await bot.launch({
+      webhook: {
+        domain: "https://telegram-app-2b8p.onrender.com",
+        port: process.env.PORT,
+      },
+    });
+    // .launch();
   } catch (error) {
     console.error("Error starting bot:", error.message);
   }
@@ -37,7 +34,7 @@ bot.start((ctx) => {
 bot.command("setchannel", (ctx) => {
   selectedChannelId = ctx.message.forward_from_chat.id;
   ctx.reply(`Канал встановлено: ${selectedChannelId}`);
-  
+
   ctx.reply(
     "Виберіть команду:",
     Markup.keyboard([
@@ -45,7 +42,6 @@ bot.command("setchannel", (ctx) => {
       ["Усього фотографій", "Дата останнього посту"],
     ]).resize()
   );
-  
 });
 
 bot.hears("Змінити тип постингу", (ctx) => {
@@ -203,7 +199,8 @@ function sendScheduledPhotos() {
   if (
     photoQueue.length > 0 &&
     shouldSend(currentTime, isNightTime) &&
-    lastPhotoSentTime.minute() !== currentTime.minute()
+    (lastPhotoSentTime.hours() !== currentTime.hours() ||
+      lastPhotoSentTime.minute() !== currentTime.minute())
   ) {
     const photo = photoQueue[0];
     sendScheduledPhoto(photo);

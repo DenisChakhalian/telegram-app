@@ -1,6 +1,6 @@
 const { Telegraf, Markup } = require("telegraf");
 const moment = require("moment-timezone");
-const { Bot2 } = require("./models/bot2");
+const { Bot3 } = require("./models/bot3");
 const { connect } = require("./utils/db");
 require("dotenv").config();
 
@@ -17,7 +17,7 @@ let count = 0;
 async function startBot() {
   try {
     await connect();
-    count = await Bot2.count();
+    count = await Bot3.count();
     await bot.telegram.deleteWebhook();
     await bot.launch({
       webhook: {
@@ -82,7 +82,7 @@ bot.hears("Дата останнього посту", async (ctx) => {
   let isGroupPhoto;
   let photoGroupId = undefined;
 
-  const photos = await Bot2.findAll();
+  const photos = await Bot3.findAll();
 
   photos.forEach((photo) => {
     if (!isGroupPhoto || photo.media_group_id !== photoGroupId) {
@@ -179,11 +179,11 @@ bot.command("delete", async (ctx) => {
     return;
   }
 
-  await Bot2.destroy({
+  await Bot3.destroy({
     where: {},
     truncate: true,
   });
-  count = await Bot2.count();
+  count = await Bot3.count();
 });
 
 bot.on("text", (ctx) => {
@@ -202,19 +202,19 @@ bot.on("photo", async (ctx) => {
     return;
   }
 
-  const samePhoto = await Bot2.findOne({
+  const samePhoto = await Bot3.findOne({
     where: {
       file_unique_id: file_unique_id,
     },
   });
 
   if (samePhoto) {
-    await Bot2.destroy({
+    await Bot3.destroy({
       where: {
         file_unique_id: file_unique_id,
       },
     });
-    count = await Bot2.count();
+    count = await Bot3.count();
     return;
   }
 
@@ -224,7 +224,7 @@ bot.on("photo", async (ctx) => {
 
   lastPhotoSentTime = currentTime;
 
-  await Bot2.create({
+  await Bot3.create({
     chatId,
     file_id,
     sendTime,
@@ -233,7 +233,7 @@ bot.on("photo", async (ctx) => {
     isGroup,
   });
 
-  count = await Bot2.count();
+  count = await Bot3.count();
 });
 
 // bot.launch()
@@ -270,7 +270,7 @@ async function sendScheduledPhotos() {
     (lastPhotoSentTime?.hours() !== currentTime?.hours() ||
       lastPhotoSentTime?.minute() !== currentTime?.minute())
   ) {
-    const photo = await Bot2.findOne({
+    const photo = await Bot3.findOne({
       order: [["createdAt", "ASC"]],
     });
     sendScheduledPhoto(photo);
@@ -305,13 +305,13 @@ async function sendScheduledPhoto(photo) {
           parse_mode: "MarkdownV2",
         },
       ]);
-      await Bot2.destroy({
+      await Bot3.destroy({
         where: {
           id: photo.id,
         },
       });
     } else {
-      const photosByGroupId = await Bot2.findAll({
+      const photosByGroupId = await Bot3.findAll({
         where: {
           media_group_id: photo.media_group_id,
         },
@@ -334,13 +334,13 @@ async function sendScheduledPhoto(photo) {
       });
       await bot.telegram.sendMediaGroup(selectedChannelId, media);
 
-      await Bot2.destroy({
+      await Bot3.destroy({
         where: {
           id: photosByGroupId.map((el) => el.id),
         },
       });
     }
-    count = await Bot2.count();
+    count = await Bot3.count();
     console.log(`Photo successfully sent to ${photo.chatId}`);
   } catch (error) {
     console.error(`Error sending photo: ${error.message}`);

@@ -89,12 +89,12 @@ bot.hears("Дата останнього посту", async (ctx) => {
       isGroupPhoto = photo.isGroup;
       photoGroupId =
         photo.media_group_id === null ? undefined : photo.media_group_id;
-      const isNightTime = currentTime.hour() >= 24 && currentTime.hour() < 19;
+      const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 19;
 
       if (
         isNightTime &&
-        currentTime?.hours() > 24 &&
-        currentTime.hours() < 10
+        (currentTime?.hours() > 0 &&
+        currentTime?.hours() < 10)
       ) {
         currentTime.set("hours", 10);
       } else {
@@ -107,9 +107,9 @@ bot.hears("Дата останнього посту", async (ctx) => {
     }
   });
 
-  const isNightTime = currentTime.hour() >= 24 && currentTime.hour() < 19;
+  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 19;
 
-  if (isNightTime && currentTime?.hours() > 24 && currentTime.hours() < 10) {
+  if (isNightTime && (currentTime?.hours() > 0 && currentTime.hours() < 10)) {
     currentTime.set("hours", 10);
     currentTime.set("minutes", 0);
   } else {
@@ -248,7 +248,7 @@ setInterval(() => {
 // }, 1000);
 
 function calculateSendTime(currentTime, lastPhotoSentTime) {
-  const isNightTime = currentTime.hour() >= 24 && currentTime.hour() < 19;
+  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 19;
 
   if (lastPhotoSentTime) {
     const nextSendTime = lastPhotoSentTime
@@ -262,7 +262,7 @@ function calculateSendTime(currentTime, lastPhotoSentTime) {
 
 async function sendScheduledPhotos() {
   const currentTime = moment().tz("Europe/Kiev");
-  const isNightTime = currentTime.hour() >= 24 && currentTime.hour() < 19;
+  const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 19;
 
   if (
     count > 0 &&
@@ -283,7 +283,7 @@ async function sendScheduledPhotos() {
 
 function shouldSend(currentTime, isNightTime) {
   if (isNightTime) {
-    if (currentTime?.hours() > 24 && currentTime.hours() < 10) {
+    if (currentTime?.hours() > 0 && currentTime.hours() < 10) {
       return false;
     }
 

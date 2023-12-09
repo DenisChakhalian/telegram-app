@@ -11,7 +11,7 @@ let selectedChannelId = +process.env.CHANEL;
 let userId = +process.env.USER;
 let lastPhotoSentTime = null;
 let isGroup = false;
-let sign;
+let sign = "[Blessed Girls](https://t.me/BlessedGirlsBySkye)";
 let count = 0;
 
 async function startBot() {
@@ -93,8 +93,8 @@ bot.hears("Дата останнього посту", async (ctx) => {
 
       if (
         isNightTime &&
-        (currentTime?.hours() > 0 &&
-        currentTime?.hours() < 10)
+        currentTime?.hours() > 0 &&
+        currentTime?.hours() < 10
       ) {
         currentTime.set("hours", 10);
       } else {
@@ -109,7 +109,7 @@ bot.hears("Дата останнього посту", async (ctx) => {
 
   const isNightTime = currentTime.hour() >= 0 && currentTime.hour() < 19;
 
-  if (isNightTime && (currentTime?.hours() > 0 && currentTime.hours() < 10)) {
+  if (isNightTime && currentTime?.hours() > 0 && currentTime.hours() < 10) {
     currentTime.set("hours", 10);
     currentTime.set("minutes", 0);
   } else {
@@ -297,11 +297,49 @@ function shouldSend(currentTime, isNightTime) {
 async function sendScheduledPhoto(photo) {
   try {
     if (!photo.isGroup || !photo.media_group_id) {
+      let isLink = false;
       await bot.telegram.sendMediaGroup(selectedChannelId, [
         {
           type: "photo",
           media: photo.file_id,
-          caption: sign,
+          caption: sign
+            ? sign
+                .split("")
+                .map((el) => {
+                  if (el === "[") {
+                    isLink = true;
+                    return el;
+                  }
+                  if (el === "]") {
+                    isLink = false;
+                    return el;
+                  }
+                  if (isLink) {
+                    return el
+                      .replace(/\_/g, "\\_")
+                      .replace(/\*/g, "\\*")
+                      .replace(/\[/g, "\\[")
+                      .replace(/\]/g, "\\]")
+                      .replace(/\(/g, "\\(")
+                      .replace(/\)/g, "\\)")
+                      .replace(/\~/g, "\\~")
+                      .replace(/\`/g, "\\`")
+                      .replace(/\>/g, "\\>")
+                      .replace(/\#/g, "\\#")
+                      .replace(/\+/g, "\\+")
+                      .replace(/\-/g, "\\-")
+                      .replace(/\=/g, "\\=")
+                      .replace(/\|/g, "\\|")
+                      .replace(/\{/g, "\\{")
+                      .replace(/\}/g, "\\}")
+                      .replace(/\./g, "\\.")
+                      .replace(/\!/g, "\\!");
+                  }
+
+                  return el;
+                })
+                .join("")
+            : sign,
           parse_mode: "MarkdownV2",
         },
       ]);
@@ -319,10 +357,48 @@ async function sendScheduledPhoto(photo) {
 
       const media = photosByGroupId.map((el, idx) => {
         if (idx === 0) {
+          let isLink = false;
           return {
             type: "photo",
             media: el.file_id,
-            caption: sign,
+            caption: sign
+              ? sign
+                  .split("")
+                  .map((el) => {
+                    if (el === "[") {
+                      isLink = true;
+                      return el;
+                    }
+                    if (el === "]") {
+                      isLink = false;
+                      return el;
+                    }
+                    if (isLink) {
+                      return el
+                        .replace(/\_/g, "\\_")
+                        .replace(/\*/g, "\\*")
+                        .replace(/\[/g, "\\[")
+                        .replace(/\]/g, "\\]")
+                        .replace(/\(/g, "\\(")
+                        .replace(/\)/g, "\\)")
+                        .replace(/\~/g, "\\~")
+                        .replace(/\`/g, "\\`")
+                        .replace(/\>/g, "\\>")
+                        .replace(/\#/g, "\\#")
+                        .replace(/\+/g, "\\+")
+                        .replace(/\-/g, "\\-")
+                        .replace(/\=/g, "\\=")
+                        .replace(/\|/g, "\\|")
+                        .replace(/\{/g, "\\{")
+                        .replace(/\}/g, "\\}")
+                        .replace(/\./g, "\\.")
+                        .replace(/\!/g, "\\!");
+                    }
+
+                    return el;
+                  })
+                  .join("")
+              : sign,
             parse_mode: "MarkdownV2",
           };
         } else {

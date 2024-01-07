@@ -47,27 +47,28 @@ async function getOneByFUI(file_unique_id) {
   return Post.findOne({
     where: {
       file_unique_id,
+      will_delete_date: {
+        [Op.eq]: null,
+      },
     },
   });
 }
 
-async function moveToQueueFromBinByFUI(file_unique_id) {
-  return Post.update(
-    { will_delete_date: null },
-    {
-      where: {
-        file_unique_id,
-      },
-    }
-  );
-}
-
 async function addToBinByFUI(file_unique_id) {
   return Post.update(
-    { will_delete_date: moment().tz("Europe/Kiev").add("day", 1) },
+    {
+      will_delete_date: moment().tz("Europe/Kiev").add("day", 1),
+      isGroup: global.isGroup,
+      media_group_id: null,
+      description: "",
+      imageUrl: "",
+    },
     {
       where: {
         file_unique_id,
+        will_delete_date: {
+          [Op.eq]: null,
+        },
       },
     }
   );

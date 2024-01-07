@@ -229,11 +229,7 @@ async function create(ctx, photo, currentTime) {
   const samePhoto = await botService.getOneByFUI(file_unique_id);
 
   if (samePhoto) {
-    if (samePhoto.will_delete_date) {
-      await botService.moveToQueueFromBinByFUI(file_unique_id);
-    } else {
-      await botService.addToBinByFUI(file_unique_id);
-    }
+    await botService.addToBinByFUI(file_unique_id);
 
     global.count = await botService.getCountAll();
 

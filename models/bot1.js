@@ -12,7 +12,7 @@ const Bot1 = sequelize.define(
     description: DataTypes.STRING,
     will_delete_date: DataTypes.DATE,
     imageUrl: DataTypes.STRING,
-    sendedAt: DataTypes.DATE,
+    messageId: DataTypes.INTEGER,
   },
   {
     tableName: "bot1s",

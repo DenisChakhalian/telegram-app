@@ -4,6 +4,7 @@ require("dotenv").config();
 
 const { Bot3: Post } = require("../../models/bot3");
 const { sequelize } = require("../utils/db");
+const settingsService = require("./settings.service");
 
 async function getBin() {
   return Post.findAll({
@@ -12,6 +13,7 @@ async function getBin() {
         [Op.not]: null,
       },
     },
+    order: [["messageId", "ASC"]],
     raw: true,
   });
 }
@@ -55,10 +57,12 @@ async function getOneByFUI(file_unique_id) {
 }
 
 async function addToBinByFUI(file_unique_id) {
+  const settings = await settingsService.getSettings();
+
   return Post.update(
     {
       will_delete_date: moment().tz("Europe/Kiev").add("day", 1),
-      isGroup: global.isGroup,
+      isGroup: settings.isGroup,
       media_group_id: null,
       description: "",
       imageUrl: "",
@@ -100,7 +104,9 @@ async function getNextPost() {
     },
   };
 
-  if (global.isRandom) {
+  const settings = await settingsService.getSettings();
+
+  if (settings.isRandom) {
     options = {
       ...options,
       order: sequelize.random(),
@@ -108,7 +114,7 @@ async function getNextPost() {
   } else {
     options = {
       ...options,
-      order: [["sendedAt", "ASC"]],
+      order: [["messageId", "ASC"]],
     };
   }
 
@@ -142,7 +148,7 @@ async function getFirstPhotoMediaGroup(media_group_id) {
         [Op.eq]: null,
       },
     },
-    order: [["sendedAt", "ASC"]],
+    order: [["messageId", "ASC"]],
   });
 }
 
@@ -170,7 +176,7 @@ async function getAllByMediaGroup(media_group_id) {
         [Op.eq]: null,
       },
     },
-    order: [["sendedAt", "ASC"]],
+    order: [["messageId", "ASC"]],
   });
 }
 

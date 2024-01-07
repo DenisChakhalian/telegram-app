@@ -180,7 +180,6 @@ module.exports = {
   deleteAll,
   getCountAll,
   getOneByFUI,
-  moveToQueueFromBinByFUI,
   addToBinByFUI,
   create,
   updateImageUrlByFUI,

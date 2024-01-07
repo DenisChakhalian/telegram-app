@@ -1,8 +1,8 @@
 const { DataTypes } = require("sequelize");
 const { sequelize } = require("../src/utils/db");
 
-const Bot3 = sequelize.define(
-  "Bot3",
+const Bot4 = sequelize.define(
+  "Bot4",
   {
     chatId: DataTypes.STRING,
     file_id: DataTypes.STRING,
@@ -15,10 +15,10 @@ const Bot3 = sequelize.define(
     sendedAt: DataTypes.DATE,
   },
   {
-    tableName: "bot3s",
+    tableName: "bot4s",
   }
 );
 
 module.exports = {
-  Bot3,
+  Bot4,
 };

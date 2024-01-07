@@ -2,18 +2,20 @@
   "name": "new-folder",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npx nodemon bot.js"
+    "start": "npx nodemon main.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.6.2",
     "canvas": "^2.11.2",
+    "cloudinary": "^1.41.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "form-data": "^4.0.0",
     "jimp": "^0.22.10",
     "moment-timezone": "^0.5.43",
     "node-schedule": "^2.1.1",
@@ -21,6 +23,7 @@
     "nodemon": "^3.0.1",
     "pg": "^8.11.3",
     "sequelize": "^6.35.1",
+    "sharp": "^0.33.1",
     "sqlite3": "^5.1.6",
     "telegraf": "^4.15.0"
   },

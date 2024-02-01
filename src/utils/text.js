@@ -76,7 +76,7 @@ const toFixLink = (text) => {
         isLink = false;
         return el;
       }
-      if (isLink || el === "#") {
+      if (isLink || el === "#" || el === "_" || el === "-") {
         return el
           .replace(/\_/g, "\\_")
           .replace(/\*/g, "\\*")

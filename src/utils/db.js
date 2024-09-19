@@ -4,9 +4,11 @@ require("dotenv").config();
 const URI = process.env.DB_URL || "";
 
 const sequelize = new Sequelize(URI, {
-  dialect: 'postgres',
   dialectOptions: {
-    ssl: false,
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
   },
 });
 
@@ -15,7 +17,7 @@ async function connect() {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
   } catch (error) {
-    console.error("Unable to connect to the database:", error.message);
+    console.error("Unable to connect to the database:", error);
   }
 }
 

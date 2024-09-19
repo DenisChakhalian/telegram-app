@@ -8,7 +8,7 @@ const sequelize = new Sequelize(URI, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false,  // Используйте true, если сервер требует подтверждения сертификата
+      rejectUnauthorized: true,
     },
   },
 });

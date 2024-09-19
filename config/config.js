@@ -6,7 +6,7 @@ const settings= {
   url: DB_URI,
   dialectOptions: {
     ssl: {
-      require: true,
+      require: false,
       rejectUnauthorized: false,
     }
   }

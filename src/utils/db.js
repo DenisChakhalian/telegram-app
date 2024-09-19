@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 require("dotenv").config();
+const fs = require('fs');
 const path = require('path');
 
 const URI = process.env.DB_URL || "";

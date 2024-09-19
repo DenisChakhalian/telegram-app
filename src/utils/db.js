@@ -6,7 +6,10 @@ const URI = process.env.DB_URL || "";
 const sequelize = new Sequelize(URI, {
   dialect: 'postgres',
   dialectOptions: {
-    ssl: false,  // Отключите SSL
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,  // Используйте true, если сервер требует подтверждения сертификата
+    },
   },
 });
 

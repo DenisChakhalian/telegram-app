@@ -37,13 +37,14 @@ async function startBot() {
 
     await bot.telegram.deleteWebhook();
 
-    await bot.launch({
-      webhook: {
-        domain: process.env.DOMAIN_LINK,
-        port: process.env.PORT,
-      },
-    });
-    // .launch();
+    await bot
+    //   .launch({
+    //   webhook: {
+    //     domain: process.env.DOMAIN_LINK,
+    //     port: process.env.PORT,
+    //   },
+    // });
+    .launch();
   } catch (error) {
     console.error("Error starting bot:", error.message);
   }

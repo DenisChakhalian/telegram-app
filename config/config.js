@@ -5,10 +5,7 @@ const DB_URI = process.env.DB_URL;
 const settings = {
   url: DB_URI,
   dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: true
-    }
+    ssl: false // Отключаем SSL
   }
 };
 

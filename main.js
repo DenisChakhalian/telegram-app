@@ -90,7 +90,7 @@ setInterval(() => {
 
 function userValidator(ctx, next) {
   if (ctx.message.from && ctx.message.from.id !== userId) {
-    console.log(ctx);
+    console.log(ctx.message.from);
     ctx.reply("ти хто");
     return;
   } else if (!ctx.message.from || !ctx.message || !ctx) {

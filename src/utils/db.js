@@ -6,7 +6,7 @@ const URI = process.env.DB_URL || "";
 const sequelize = new Sequelize(URI, {
   dialectOptions: {
     ssl: {
-      require: true,
+      require: false,
       rejectUnauthorized: false,
     },
   },

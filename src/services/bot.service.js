@@ -2,7 +2,7 @@ const { Op } = require("sequelize");
 const moment = require("moment-timezone");
 require("dotenv").config();
 
-const { Bot3: Post } = require("../../models/bot3");
+const { Bot1: Post } = require("../../models/bot1");
 const { sequelize } = require("../utils/db");
 const settingsService = require("./settings.service");
 
